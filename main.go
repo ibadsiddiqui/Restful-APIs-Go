@@ -1,4 +1,7 @@
-package main 
+package main
 
-import "net/http"
-
+import (
+	"fmt"
+	"net/http"
+	"os"
+)
