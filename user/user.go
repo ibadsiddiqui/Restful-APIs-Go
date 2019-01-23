@@ -1,6 +1,7 @@
 package user
 
 import (
+	"github.com/asdine/storm"
 	// "errors"
 
 	"gihub.com/asdine/storm"
@@ -48,4 +49,18 @@ func One(id bson.ObjectId) (*User, error) {
 		return nil, err
 	}
 	return u, nil
+}
+// Delete removes a given record from the database
+func Delete(id bson.ObjectId) error {
+	db, err := storm.Open(dbPath)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+	u := new(User)
+	err = db.One("ID", id, u)
+	if err != nil {
+		return err
+	}
+	return db.DeleteStruct(u)
 }
