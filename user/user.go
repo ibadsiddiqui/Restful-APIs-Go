@@ -1,7 +1,7 @@
 package user
 
 import (
-	"error"
+	"errors"
 
 	"github.com/asdine/storm"
 
@@ -16,7 +16,8 @@ type User struct {
 
 const dbPath = "users.db"
 
-var ErrRecordInvalid = error.New("Record is invalid")
+// errors
+var ErrRecordInvalid = errors.New("Record is invalid")
 
 // All retrieves all users from the database
 func All() ([]User, error) {
