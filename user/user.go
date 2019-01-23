@@ -1,10 +1,10 @@
 package user
 
 import (
-	"github.com/asdine/storm"
-	// "errors"
+	"error"
 
-	"gihub.com/asdine/storm"
+	"github.com/asdine/storm"
+
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -50,6 +50,7 @@ func One(id bson.ObjectId) (*User, error) {
 	}
 	return u, nil
 }
+
 // Delete removes a given record from the database
 func Delete(id bson.ObjectId) error {
 	db, err := storm.Open(dbPath)
@@ -63,4 +64,26 @@ func Delete(id bson.ObjectId) error {
 		return err
 	}
 	return db.DeleteStruct(u)
+}
+
+// Save updates or creates a given record in the database
+func (u *User) Save() error {
+	if err := u.validate(); err != nil {
+		return err
+	}
+	db, err := storm.Open(dbPath)
+	if err != nil {
+		return err
+	}
+
+	defer db.Close()
+	return db.Save(u)
+}
+
+// Validate makes sure that the record valid data
+func (u *User) validate() error {
+	if u.Name == "" {
+		return ErrRecordInvalid
+	}
+	return nil
 }
