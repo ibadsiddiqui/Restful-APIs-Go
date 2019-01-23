@@ -33,3 +33,19 @@ func All() ([]User, error) {
 	}
 	return users, nil
 }
+
+// One returns a single user record from the databae
+func One(id bson.ObjectId) (*User, error) {
+	db, err := storm.Open(dbPath)
+	if err != nil {
+		return nil, err
+	}
+
+	defer db.Close()
+	u := new(User)
+	err = db.One("ID", id, u)
+	if err != nil {
+		return nil, err
+	}
+	return u, nil
+}
