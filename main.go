@@ -4,20 +4,12 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+
+	"github.com/ibadsiddiqui/RESTful-APIs-Go/handlers"
 )
 
-func rootHandler(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/" {
-		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte("Assets not found"))
-		return
-	}
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Running API v1\n"))
-}
-
 func main() {
-	http.HandleFunc("/", rootHandler)
+	http.HandleFunc("/", handlers.RootHandler)
 	err := http.ListenAndServe("localhost:4000", nil)
 	if err != nil {
 		fmt.Println(err)
