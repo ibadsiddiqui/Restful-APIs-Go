@@ -37,3 +37,26 @@ func usersGetAll(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func usersPostOne(w http.ResponseWriter, r *http.Request) {
+	u := new(user.User)
+	err := bodyToUser(r, u)
+	if err != nil {
+		postError(w, http.StatusBadRequest)
+		return
+	}
+
+	u.ID = bson.NewObjectId()
+	err = u.Save()
+	if err != nil {
+		if err == user.ErrRecordInvalid {
+			postError(w, http.StatusBadRequest)
+		} else {
+			postError(w, http.StatusInternalServerError)
+		}
+		return
+	}
+
+	w.Header().Set("Location", "/users/"+u.ID.Hex())
+	w.WriteHeader(http.StatusCreated)
+
+}
