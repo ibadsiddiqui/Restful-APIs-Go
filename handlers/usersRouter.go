@@ -12,13 +12,10 @@ func UsersRouter(w http.ResponseWriter, r *http.Request) {
 	if path == "/users" {
 		switch r.Method {
 		case http.MethodGet:
+			usersGetAll(w, r)
 			return
 		case http.MethodPost:
 			return
-		// case http.MethodPut:
-		// 	return
-		// case http.MethodPatch:
-		// 	return
 		default:
 			postError(w, http.StatusMethodNotAllowed)
 			return
@@ -42,7 +39,7 @@ func UsersRouter(w http.ResponseWriter, r *http.Request) {
 	case http.MethodDelete:
 		return
 	default:
-		postError(w, http.ErrBodyNotAllowed)
+		postError(w, http.StatusMethodNotAllowed)
 		return
 	}
 }
